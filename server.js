@@ -8,7 +8,8 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
-import pdfParse from 'pdf-parse';
+import pkg from "pdf-parse/lib/pdf-parse.js"; // ✅ direct to the parser, no tests
+const pdf = pkg;
 import mammoth from 'mammoth';
 import fs from 'fs';
 import path from 'path';
@@ -19,7 +20,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 30001;
 
 // ⛔ Direct API key here (no dotenv)
 const GEMINI_API_KEY = "AIzaSyCwSIJA62axl23pdvoVrZBiesZ7HRRwHRQ"; 
@@ -35,7 +36,7 @@ app.use(express.json({ limit: '2mb' }));
 
 // Gemini init
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
 // ===== HELPERS =====
 async function askGemini(prompt, temperature = 0.7) {
